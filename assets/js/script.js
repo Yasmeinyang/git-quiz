@@ -99,3 +99,165 @@ var questions = function () {
         answerEl.className = "answer-choice";
         answerEl.textContent = "3. " + questionObj[i].options[2];
         panelEl.appendChild(answerEl);
+
+        var answerEl = document.createElement("div");
+        answerEl.setAttribute("data-question-id", "4"); // Set question option id
+        answerEl.setAttribute("data-answer-id", questionObj[i].answer); // set correct answer id
+        answerEl.setAttribute("data-panel-id", "panel" + [i + 1]); // set question group id
+        answerEl.className = "answer-choice";
+        answerEl.textContent = "4. " + questionObj[i].options[3];
+        panelEl.appendChild(answerEl);
+
+        var statusEl = document.createElement("div");
+        statusEl.setAttribute("id", "answer-status");
+        statusEl.className = "status";
+        panelEl.appendChild(statusEl);
+    }
+}
+
+// Check selected answer and give results
+var checkAnswer = function (questionId, answerId, panelId) {
+
+    var panel1El = document.querySelector('#panel1');
+    var panel2El = document.querySelector('#panel2');
+    var panel3El = document.querySelector('#panel3');
+    var panel4El = document.querySelector('#panel4');
+    var statusEl = document.querySelector("#status");
+
+    switch (panelId) {
+        case 'panel1':
+            console.log("Panel 1");
+            if (questionId === answerId) {
+                statusEl.textContent = "Correct!"
+                statusEl.className = "status-correct"
+                panel1El.setAttribute("style", "display: none"); // Hide question group after answer selected
+            }
+            else {
+                timeLeft = timeLeft - 10;
+                statusEl.textContent = "Wrong!"
+                statusEl.className = "status-wrong"
+                panel1El.setAttribute("style", "display: none"); // Hide question group after answer selected
+            };
+            break;
+        case 'panel2':
+            console.log("Panel 2");
+            if (questionId === answerId) {
+                statusEl.textContent = "Excellent!"
+                statusEl.className = "status-correct"
+                panel2El.setAttribute("style", "display: none"); // Hide question group after answer selected
+            }
+            else {
+                timeLeft = timeLeft - 10;
+                statusEl.textContent = "Wrong Again!"
+                statusEl.className = "status-wrong"
+                panel2El.setAttribute("style", "display: none"); // Hide question group after answer selected
+            };
+            break;
+        case 'panel3':
+            console.log("Panel 3");
+            if (questionId === answerId) {
+                statusEl.textContent = "You Got It!"
+                statusEl.className = "status-correct"
+                panel3El.setAttribute("style", "display: none"); // Hide question group after answer selected
+            }
+            else {
+                timeLeft = timeLeft - 10;
+                statusEl.textContent = "Ouch!"
+                statusEl.className = "status-wrong"
+                panel3El.setAttribute("style", "display: none"); // Hide question group after answer selected
+            };
+            break;
+        case 'panel4':
+            console.log("Panel 4");
+            if (questionId === answerId) {
+                statusEl.textContent = "Well Done!"
+                statusEl.className = "status-correct"
+                panel4El.setAttribute("style", "display: none"); // Hide question group after answer selected
+            }
+            else {
+                timeLeft = timeLeft - 10;
+                statusEl.textContent = "Totally Wrong."
+                statusEl.className = "status-wrong"
+                panel4El.setAttribute("style", "display: none"); // Hide question group after answer selected
+            };
+            break;
+        case 'panel5':
+            console.log("Panel 5");
+            if (questionId === answerId) {
+                statusEl.textContent = "Awesome!"
+                statusEl.className = "status-correct"
+                endGame(timeLeft); // Game is finished go to endGame()
+            }
+            else {
+                timeLeft = timeLeft - 10;
+                statusEl.textContent = "Not Correct."
+                statusEl.className = "status-wrong"
+                endGame(timeLeft); // Game is finished go to endGame()
+            };
+            break;
+    }
+}
+
+// End game function
+var endGame = function (timeLeft) {
+    clearInterval(timeInterval); // Stop Timer
+    quizEl.innerHTML = "<h2>All Done!</h2><h3>Your final score is " + (timeLeft) + "</h3>";
+    var highscoreEl = document.querySelector('#highscore-panel');
+    highscoreEl.setAttribute("style", "display: block; margin-top: -250px");
+}
+
+// Game over record high score
+var recordHighScores = function () {
+    event.preventDefault();
+    var playerInput = document.querySelector("input[name='player-initials']").value;
+    // Check if input values are empty strings
+    if (!playerInput) {
+        alert("Please enter your name or initals!");
+        return false;
+    }
+    // clear the screen
+    highscoreEl.textContent = "";
+    quizEl.textContent = "";
+    statusEl.textContent = "";
+
+    // Gather data for local storage
+    var highscore = {
+        name: playerInput,
+        score: timeLeft
+    }
+    localStorage.setItem('scores', JSON.stringify(highscore));
+
+    showHighScores();
+};
+
+// Build high score list
+var showHighScores = function () {
+    var savedScores = localStorage.getItem("scores")
+    if (!savedScores) {
+        alert("No High Scores Recorded!")
+        return false;
+    }
+    savedScores = JSON.parse(savedScores);
+    quizEl.innerHTML = "<h2 class='score-header'>High Scores!</h2>" +
+        "<div class='score-list'>1) " + savedScores.name + " &ndash; " + savedScores.score + "</div>" +
+        "<div class='score-buttons'>" +
+        "<button class='btn' onclick='location.reload()'>Go Back</button>" +
+        "<button class='btn' onclick='localStorage.clear()'>Clear High Scores</button>" +
+        "</div>";
+}
+
+// Gather question and answer id's for checkAnswer()
+var answerHandler = function (event) {
+    var targetEl = event.target;
+
+    if (targetEl.matches(".answer-choice")) {
+        var questionId = targetEl.getAttribute("data-question-id");
+        var answerId = targetEl.getAttribute("data-answer-id");
+        var panelId = targetEl.getAttribute("data-panel-id");
+        checkAnswer(questionId, answerId, panelId);
+    }
+}
+
+startBtn.onclick = timer;
+quizEl.addEventListener("click", answerHandler);
+formEl.addEventListener("submit", recordHighScores);
