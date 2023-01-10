@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+    <title>JavaScript Quiz</title>
+
+    <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>JavaScript Quiz</h1>
+        <div class="timer" id="countdown"></div>
+        <nav>
+            <ul>
+                <li><a href="#" onclick="showHighScores()">View High Scores</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="quiz-wrapper">
+        <section class="quiz-body" id="quiz-body">
+
+        </section>
+        <div class="status" id="status">
+
+        </div>
+
+
+        <button class="btn" id="start">Start Quiz</button>
+
+        <section class="highscore" id="highscore-panel">
+            <form id="highscore">
+                <div class="form-group">
+                    <input type="text" name="player-initials" placeholder="Enter Initials" />
+                </div>
+
+                <div class="form-group">
+                    <button class="btn" id="save-task" type="submit">Submit</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+
+    <script src="./assets/js/script.js"></script>
+
+</body>
+
+</html>
