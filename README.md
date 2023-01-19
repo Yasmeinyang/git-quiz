@@ -1,7 +1,9 @@
 # CODE QUIZ
 
 ## Build
-
+ - HTML
+ - CSS
+ - JAVASCRIPT
 ## URL
 
 ## Screenshot
